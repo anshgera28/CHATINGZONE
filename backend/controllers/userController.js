@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
 
+
 export const register = async(req, res)=>{
     try{
         const {fullName, username, password, confirmPassword, gender} = req.body;
@@ -79,6 +80,18 @@ export const login = async(req, res)=>{
 export const logout = (req, res)=>{
     try{
         return res.status(200).cookie("token", "", {maxAge: 0}).json({message: "User logged out successfully"});
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+// get other users
+export const getOtherUsers = async(req, res)=>{
+    try{
+        const logedinUserId = req.Id;
+        const otherUsers = await User.find({ _id: { $ne: logedinUserId } }).select("-password")
+        return res.status(200).json(otherUsers);
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
