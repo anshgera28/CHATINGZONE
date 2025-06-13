@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
-import { isAuthenticated } from "./middleware/isAuthenticated.js";
+import messageRoute from "./routes/messageRoutes.js";
+
+
 
 
 
@@ -20,6 +22,8 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/message", messageRoute);
+
 
 
 
