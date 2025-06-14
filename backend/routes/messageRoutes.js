@@ -1,7 +1,6 @@
 import express from "express";
-import { sendMessage } from "../controllers/messageController.js";
+import { getMessage, sendMessage } from "../controllers/messageController.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
-import { getMessage } from "../controllers/messageController.js";
 
 
 
