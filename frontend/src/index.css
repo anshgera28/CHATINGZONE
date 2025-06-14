@@ -67,7 +67,7 @@ button:focus-visible {
   }
 } */
  body {
-  background-color: #242424;
+  background: url("../public/bg.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
