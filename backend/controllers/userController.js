@@ -37,7 +37,7 @@ export const register = async(req, res)=>{
             profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto,
             gender
         });
-        return res.status(201).json({message: "User registered successfully"});
+        return res.status(201).json({message: "User registered successfully", success: true});
         
     }catch(error){
         console.log(error);
