@@ -1,8 +1,21 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import OtherUsers from "./OtherUsers";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+    const navigate = useNavigate();
+    const logoutHandler = async () => {
+        try {
+            const res  = await axios.get(`http://localhost:8080/api/v1/user/logout`)
+            navigate("/login");
+            toast.success(res.data.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
     return (
         <div className="border-r border-slate-500 flex flex-col">
             <form action="" className="flex items-center gap-2 outline-none">
@@ -15,7 +28,7 @@ const Sidebar = () => {
             <div className="divider px-3"></div>
             <OtherUsers />
             <div className="mt-4">
-                <button className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-400/20 to-blue-600/20 backdrop-blur-md border border-white/20 rounded-md shadow-md hover:bg-blue-400/30 transition-all duration-300">
+                <button onClick={logoutHandler} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-400/20 to-blue-600/20 backdrop-blur-md border border-white/20 rounded-md shadow-md hover:bg-blue-400/30 transition-all duration-300">
                     Logout
                 </button>
             </div>
