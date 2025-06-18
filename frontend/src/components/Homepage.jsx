@@ -14,8 +14,8 @@
 // export default Homepage
 
 import React from "react";
-import Sidebar from "./Sidebar";
 import MessageContainer from "./MessageContainer";
+import Sidebar from "./Sidebar";
 
 const Homepage = () => {
     return (
