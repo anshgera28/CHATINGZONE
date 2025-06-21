@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setAuthUser } from "../redux/userSlice"; // Assuming you have this action
+import { setAuthUser } from "../redux/userSlice";
 
 const Login = () => {
     const [user, setUser] = useState({
@@ -32,7 +32,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-2xl shadow-2xl">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold text-white tracking-tight">
