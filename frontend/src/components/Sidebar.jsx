@@ -1,40 +1,55 @@
-import React from "react";
-import { FiSearch } from "react-icons/fi";
-import OtherUsers from "./OtherUsers";
 import axios from "axios";
+import React from "react";
 import toast from "react-hot-toast";
+import { BiLogOut } from "react-icons/bi";
+import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import OtherUsers from "./OtherUsers";
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const logoutHandler = async () => {
         try {
-            const res  = await axios.get(`http://localhost:8080/api/v1/user/logout`)
+            const res = await axios.get(`http://localhost:8080/api/v1/user/logout`);
             navigate("/login");
             toast.success(res.data.message);
         } catch (error) {
             toast.error(error.response.data.message);
         }
-    }
+    };
+
     return (
-        <div className="border-r border-slate-500 flex flex-col">
-            <form action="" className="flex items-center gap-2 outline-none">
-                <input className="input input-bordered rounded-md outline-none" type="text"
-                    placeholder="Search" />
-                <button type="submit" className="btn btn-primary outline-none">
-                    <FiSearch className="text-gray-500 text-2xl outline-none" />
-                </button>
-            </form>
-            <div className="divider px-3"></div>
-            <OtherUsers />
-            <div className="mt-4">
-                <button onClick={logoutHandler} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-400/20 to-blue-600/20 backdrop-blur-md border border-white/20 rounded-md shadow-md hover:bg-blue-400/30 transition-all duration-300">
-                    Logout
-                </button>
+        <div className="w-1/3 border-r border-gray-700 flex flex-col bg-gray-800 p-4">
+            <div className="flex-shrink-0 mb-4">
+                <form className="flex items-center gap-2">
+                    <input
+                        className="input input-bordered rounded-full w-full bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                        type="text"
+                        placeholder="Search users..."
+                    />
+                    <button type="submit" className="btn btn-circle btn-ghost">
+                        <FiSearch className="text-white text-2xl" />
+                    </button>
+                </form>
             </div>
 
-        </div>
-    )
-}
+            <div className="divider px-3 before:bg-gray-700 after:bg-gray-700"></div>
 
-export default Sidebar
+            <div className="flex-grow overflow-auto">
+                <OtherUsers />
+            </div>
+
+            <div className="mt-4 flex-shrink-0">
+                <button
+                    onClick={logoutHandler}
+                    className="btn btn-ghost w-full flex items-center justify-start gap-2 text-white hover:bg-red-500 hover:text-white transition-all duration-300"
+                >
+                    <BiLogOut size={24} />
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Sidebar;

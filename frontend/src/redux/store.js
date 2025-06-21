@@ -12,11 +12,13 @@
 
 // store.js
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice.js"; // ✅ Use any name, but it's the reducer directly
+import messageReducer from "./messageSlice";
+import userReducer from "./userSlice";
 
 const store = configureStore({
     reducer: {
-        user: userReducer // ✅ No need to access .reducer
+        user: userReducer,
+        message: messageReducer
     }
 });
 

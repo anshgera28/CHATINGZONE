@@ -38,10 +38,21 @@ export const getMessage = async (req, res) => {
     try{
         const receiverId = req.params.id;
         const senderId = req.Id;
-        const Conversation = await conversation.findOne({
+        const conversationDetails = await conversation.findOne({
             participants: { $all: [senderId, receiverId] }
-        }).populate("messages");
-        return res.status(200).json(Conversation?.messages);
+        }).populate({
+            path: "messages",
+            populate: {
+                path: "senderId",
+                select: "fullName profilePhoto"
+            }
+        });
+
+        if (!conversationDetails) {
+            return res.status(200).json([]);
+        }
+
+        return res.status(200).json(conversationDetails.messages);
 
     }catch(error){
         console.log(error);

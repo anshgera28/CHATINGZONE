@@ -1,7 +1,6 @@
-import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
+import User from "../models/userModel.js";
 
 
 
@@ -23,9 +22,9 @@ export const register = async(req, res)=>{
         // encrypting password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        //profile photo
-        const maleProfilePhoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleProfilePhoto = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+        //profile photo using DiceBear Avatars
+        const boyProfilePhoto = `https://api.dicebear.com/8.x/adventurer/svg?seed=${username}`;
+        const girlProfilePhoto = `https://api.dicebear.com/8.x/adventurer-neutral/svg?seed=${username}`;
 
 
 
@@ -33,12 +32,12 @@ export const register = async(req, res)=>{
         await User.create({
             fullName,
             username,
-            password:hashedPassword,
-            profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto,
+            password: hashedPassword,
+            profilePhoto: gender === "male" ? boyProfilePhoto : girlProfilePhoto,
             gender
         });
-        return res.status(201).json({message: "User registered successfully", success: true});
-        
+        return res.status(201).json({ message: "User registered successfully", success: true });
+
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
@@ -67,9 +66,9 @@ export const login = async(req, res)=>{
         }
         const token =  await jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
         return res.status(200).cookie("token", token,{maxAge: 24 * 60 * 60 * 1000, httpOnly: true,  sameSite: "strict"}).json({_id: user._id, username: user.username, fullName: user.fullName, profilePhoto: user.profilePhoto});
-        
-        
-        
+
+
+
 
     }catch(error){
         console.log(error);

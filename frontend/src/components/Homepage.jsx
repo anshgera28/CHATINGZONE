@@ -19,9 +19,11 @@ import Sidebar from "./Sidebar";
 
 const Homepage = () => {
     return (
-        <div className="flex h-[500px] sm:h-[600px] md:h-[700px] rounded-xl shadow-xl bg-gray-200 bg-opacity-20 border border-gray-300 backdrop-blur-md overflow-hidden">
-            <Sidebar />
-            <MessageContainer />
+        <div className='flex h-screen w-screen items-center justify-center bg-gray-900'>
+            <div className="flex h-[90vh] w-[90vw] rounded-2xl shadow-2xl bg-gray-800 bg-opacity-90 border border-gray-700 backdrop-blur-md overflow-hidden">
+                <Sidebar />
+                <MessageContainer />
+            </div>
         </div>
     );
 };
