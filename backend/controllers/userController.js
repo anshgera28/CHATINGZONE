@@ -22,18 +22,15 @@ export const register = async(req, res)=>{
         // encrypting password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        //profile photo using DiceBear Avatars
-        const boyProfilePhoto = `https://api.dicebear.com/8.x/adventurer/svg?seed=${username}`;
-        const girlProfilePhoto = `https://api.dicebear.com/8.x/adventurer-neutral/svg?seed=${username}`;
-
-
+        // profile photo using DiceBear Avatars (stable identicon style)
+        const profilePhoto = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(username)}`;
 
         // for registration ye humara create hua hai mpongo db database mein ke ander ......
         await User.create({
             fullName,
             username,
             password: hashedPassword,
-            profilePhoto: gender === "male" ? boyProfilePhoto : girlProfilePhoto,
+            profilePhoto,
             gender
         });
         return res.status(201).json({ message: "User registered successfully", success: true });

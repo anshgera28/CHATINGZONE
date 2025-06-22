@@ -13,12 +13,15 @@
 // store.js
 import { configureStore } from "@reduxjs/toolkit";
 import messageReducer from "./messageSlice";
+import socketReducer from "./socketSlice";
 import userReducer from "./userSlice";
+
 
 const store = configureStore({
     reducer: {
         user: userReducer,
-        message: messageReducer
+        message: messageReducer,
+        socket: socketReducer
     }
 });
 

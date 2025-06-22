@@ -24,9 +24,9 @@
 
 // export default OtherUsers
 import React from "react";
-import OtherUser from "./OtherUser";
-import useGetOtherUsers from "../hooks/GetOtherUsers";
 import { useSelector } from "react-redux";
+import useGetOtherUsers from "../hooks/GetOtherUsers";
+import OtherUser from "./OtherUser";
 
 
 
