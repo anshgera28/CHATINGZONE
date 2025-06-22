@@ -54,7 +54,7 @@ const Sidebar = () => {
             <div className="divider px-3 before:bg-gray-700 after:bg-gray-700"></div>
 
             <div className="flex-grow overflow-auto">
-                <OtherUsers />
+                <OtherUsers onSelectUser={() => {}} />
             </div>
 
             <div className="mt-4 flex-shrink-0">

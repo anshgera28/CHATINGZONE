@@ -10,8 +10,8 @@
 //     return (
 //         <div onClick={() => selectedUserHandler(user)} className="p-2 hover:bg-gray-100 dark:hover:bg-blue-400 opacity-80 rounded-lg transition duration-150 cursor-pointer">
 //             <div className="flex items-center gap-4">
-//                 <divhttp://localhost:8080/api/v1/message/684a9e21c66b6ce6403e8f54 className="avatar online">
-//                     <div className="w-12 h-12 rounded-full overflow-hidden">
+//                 <div className="avatar online">
+//                     <div className="w-12 h-12 rounded-full">
 //                         <img
 //                             src={user?.profilePhoto}
 //                             alt="User"
@@ -32,40 +32,53 @@
 // export default OtherUser
 
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSelectedUser } from "../redux/userSlice";
 
-const OtherUser = ({ user }) => {
+const OtherUser = ({ user, isOnline = false, isSelected = false, onSelectUser }) => {
     const dispatch = useDispatch();
-    const { selectedUser } = useSelector(store => store.user);
 
-    const selectedUserHandler = (user) => {
+    const handleClick = () => {
         dispatch(setSelectedUser(user));
+        if (onSelectUser && typeof onSelectUser === 'function') {
+            onSelectUser(user);
+        }
     };
-
-    const isSelected = selectedUser?._id === user?._id;
 
     return (
         <div
-            onClick={() => selectedUserHandler(user)}
-            className={`flex items-center gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${
-                isSelected ? 'bg-blue-500' : 'hover:bg-gray-700'
-            }`}
+            onClick={handleClick}
+            className={`flex items-center p-4 transition-all duration-200 cursor-pointer ${
+                isSelected 
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500' 
+                    : 'bg-gray-800 hover:bg-gray-700 border-l-4 border-transparent hover:border-blue-500'
+            } rounded-lg mx-2 my-1 shadow-sm`}
         >
-            <div className={`avatar ${"online"}`}>
-                <div className="w-12 h-12 rounded-full ring-2 ring-offset-2 ring-offset-gray-800 ${isSelected ? 'ring-white' : 'ring-gray-600'}">
+            <div className="relative">
+                <div className={`w-12 h-12 rounded-full overflow-hidden border-2 ${
+                    isSelected ? 'border-white' : 'border-gray-600'
+                }`}>
                     <img
                         src={user?.profilePhoto}
                         alt="User Avatar"
                         className="object-cover w-full h-full"
                     />
                 </div>
+                {isOnline && (
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800"></div>
+                )}
             </div>
-            <div className="flex-1">
-                <p className={`text-lg font-semibold ${isSelected ? 'text-white' : 'text-gray-200'}`}>
+            <div className="ml-4 flex-1">
+                <p className={`text-lg font-semibold ${isSelected ? 'text-white' : 'text-white'}`}>
                     {user.fullName}
                 </p>
+                <p className={`text-sm ${isSelected ? 'text-blue-100' : 'text-gray-400'}`}>
+                    {isOnline ? 'Online' : 'Offline'}
+                </p>
             </div>
+            {isSelected && (
+                <div className="w-1 h-8 bg-white rounded-full"></div>
+            )}
         </div>
     );
 };

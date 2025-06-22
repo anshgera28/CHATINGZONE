@@ -1,61 +1,78 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import io from 'socket.io-client'
-import './App.css'
-import Homepage from './components/Homepage'
-import Login from './components/login'
-import Signup from './components/Signup'
-import { setOnlineUsers, setSocket } from './redux/socketSlice'
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom';
+import './App.css';
+import Homepage from './components/Homepage';
+import Login from './components/login';
+import Signup from './components/Signup';
+import SocketClient from './components/SocketClient';
+import ChatWindow from './components/ChatWindow';
+import OtherUsers from './components/OtherUsers';
 
+// Create a wrapper component for authenticated routes
+const AuthenticatedLayout = ({ children }) => {
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { authUser } = useSelector(store => store.user);
+  const location = useLocation();
 
+  // Reset selected user when location changes
+  useEffect(() => {
+    setSelectedUser(null);
+  }, [location.pathname]);
+
+  if (!authUser) {
+    return children;
+  }
+
+  return (
+    <div className="flex h-screen bg-gray-900 text-white">
+      {/* Sidebar */}
+      <div className="w-1/3 border-r border-gray-800 flex flex-col bg-gray-900">
+        {children}
+        <div className="flex-1 overflow-hidden">
+          <OtherUsers 
+            onSelectUser={setSelectedUser} 
+            selectedUser={selectedUser} 
+          />
+        </div>
+      </div>
+      
+      {/* Chat Window */}
+      <div className="flex-1 flex flex-col bg-gray-800">
+        <ChatWindow selectedUser={selectedUser} />
+      </div>
+      
+      {/* Socket Client */}
+      <SocketClient />
+    </div>
+  );
+};
 
 const router = createBrowserRouter([
   {
     path: "",
-    element: <Homepage/>,
+    element: (
+      <AuthenticatedLayout>
+        <Homepage />
+      </AuthenticatedLayout>
+    ),
   },
   {
     path: "register",
-    element: <Signup/>,
+    element: <Signup />,
   },
   {
     path: "login",
-    element: <Login/>,
+    element: <Login />,
   },
 ]);
 
 const App = () => {
-  const {authUser} = useSelector(store => store.user);
-  const {socket} = useSelector(store => store.socket);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if(authUser){
-      const socket = io("http://localhost:8080", {
-        query: {userId: authUser._id}
-      });
-      dispatch(setSocket(socket));
-
-      socket.on("getOnlineUsers", (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers));
-      })
-      return () => {
-        socket.close();
-      }
-    }else{
-      if(socket){
-        socket.close();
-        dispatch(setSocket(null));
-      }
-    }
-  }, [authUser])
-
   return (
-    <div className="p-4 h-screen items-center flex justify-center">
+    <div className="min-h-screen bg-gray-900 text-white">
       <RouterProvider router={router} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
